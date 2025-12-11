@@ -101,9 +101,38 @@ npm install -g @githubnext/github-copilot-cli
 ```
 # AI Council System - Development Repository
 
+[![License](https://img.shields.io/badge/license-TBD-blue.svg)](LICENSE)
+[![Phase](https://img.shields.io/badge/phase-Foundation-yellow.svg)](#development-phases)
+[![Status](https://img.shields.io/badge/status-Prototype-orange.svg)](#project-status)
+
 ## 🎯 Project Vision
 
 A decentralized 24/7 live streaming platform where AI agents form organizational bodies to debate real-time events, with user participation through cryptocurrency mechanisms.
+
+## 📑 Documentation
+
+- **[ARCHITECTURE.md](ARCHITECTURE.md)** - Detailed architecture and design overview
+- **[CONTRIBUTING.md](CONTRIBUTING.md)** - Guidelines for contributors
+- **[CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)** - Community guidelines
+- **[/docs](docs/)** - Technical and user documentation
+
+## 🚀 Quick Start
+
+1. **Read the documentation:**
+   - Start with [ARCHITECTURE.md](ARCHITECTURE.md) to understand the structure
+   - Review [CONTRIBUTING.md](CONTRIBUTING.md) for contribution guidelines
+
+2. **Explore the repository:**
+   ```bash
+   git clone https://github.com/ivi374/a-recursive-root.git
+   cd a-recursive-root
+   ```
+
+3. **Navigate the structure:**
+   - `/workspace` - Active development projects
+   - `/docs` - Documentation
+   - `/ai` - AI agents and prompts
+   - `/swarm` - Orchestration system
 
 ## 📋 Current Phase: Phase 1 - Foundation Architecture
 
@@ -113,6 +142,7 @@ A decentralized 24/7 live streaming platform where AI agents form organizational
 - **Developer**: Solo (Swarm-Assisted)
 - **Start Date**: October 14, 2025
 - **Repository**: Development Prototype
+- **Framework**: Z Cartridge
 
 ## 🏗️ Architecture Overview
 
@@ -236,7 +266,23 @@ ai-council-system/
 
 ## 🤝 Contributing
 
-Solo developer project with swarm-assisted development. Contact via GitHub issues.
+We welcome contributions from both human developers and AI coding assistants!
+
+### How to Contribute
+
+1. **Read the guidelines:** Check out [CONTRIBUTING.md](CONTRIBUTING.md) for detailed information
+2. **Follow the Code of Conduct:** Review [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)
+3. **Understand the architecture:** Read [ARCHITECTURE.md](ARCHITECTURE.md)
+4. **Submit your changes:** Create a pull request with clear description
+
+### AI-Assisted Development
+
+This repository actively uses AI coding assistants (GitHub Copilot, Claude, etc.):
+- Use branch prefixes like `copilot/` or `claude/` for AI-generated work
+- Clearly indicate AI assistance in PR descriptions
+- Review AI-generated code thoroughly before committing
+
+For more details, see the [Contributing Guide](CONTRIBUTING.md).
 
 ## 📄 License
 
@@ -256,11 +302,37 @@ TBD - Pending legal review
 
 ## 📚 Z Cartridge Foundation
 
-This repository is built on the Z Cartridge framework, providing:
-- Reproducible development environments
-- Governance policies and standards
-- Documentation architecture
-- Container definitions
-- Workspace management
+This repository is built on the **Z Cartridge framework**, providing:
+- **Reproducible Development Environments:** Consistent setup across machines
+- **Governance Policies and Standards:** Clear guidelines and procedures
+- **Documentation Architecture:** Structured documentation approach
+- **Container Definitions:** Docker and containerization support
+- **Workspace Management:** Organized project structure
 
-See `/docs` for detailed cartridge documentation.
+### Repository Structure
+
+```
+a-recursive-root/
+├── ai/                    # AI agents, prompts, and configurations
+├── workspace/             # Active development projects
+├── swarm/                 # Orchestration and coordination
+├── docs/                  # Technical and user documentation
+├── environment/           # Environment configurations
+├── governance/            # Policies and procedures
+├── containers/            # Docker and container configs
+├── cloud/                 # Cloud infrastructure
+├── integrations/          # Third-party integrations
+├── tools/                 # Development utilities
+├── scripts/               # Automation scripts
+├── bin/                   # Executable commands
+├── templates/             # Reusable templates
+├── data/                  # Datasets and data sources
+├── research/              # Research materials
+├── archive/               # Historical data
+├── secrets/               # Secret management (encrypted)
+├── licenses/              # License information
+├── provenance/            # Data provenance tracking
+└── observability/         # Monitoring and logging
+```
+
+For detailed architecture information, see [ARCHITECTURE.md](ARCHITECTURE.md).
