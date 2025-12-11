@@ -150,8 +150,38 @@ TBD - Pending legal review
 
 ---
 
-**Last Updated**: October 23, 2025
+## 📜 Repository History & Evolution
+
+**Historical Note**: This repository (`a-recursive-root`) serves as the **main branch origin** and **development foundation** for the AI Council System project, which evolved into the **ai-council--coliseum** production platform.
+
+### Key Historical Branch
+
+**`claude/phase4-advanced-features-011CUSN6Nu1tuVpbLu9gZBhc`** ⭐
+
+This branch represents the most complete state of development, containing:
+- ✅ Complete Phases 1-3 (foundation, production features, blockchain)
+- 🚧 Phase 4 in progress (advanced features with Phase 4.3 complete)
+- 28,500+ lines of production code
+- Comprehensive documentation
+
+**For complete historical context**, see:
+- **REPOSITORY_HISTORY.md**: Comprehensive evolution documentation
+- **archive/curated/MAIN_BRANCH_ORIGIN.md**: Main branch genesis and evolution
+- **BRANCH_STATUS.md**: Branch relationships and status
+
+**Repository Evolution**:
+```
+a-recursive-root (Development Foundation)
+    └─→ ai-council--coliseum (Production Platform)
+```
+
+This repository maintains the definitive historical archive of all development phases.
+
+---
+
+**Last Updated**: December 11, 2025
 **Version**: 0.1.0-alpha
+**Status**: Historical Archive & Development Foundation
 
 ## 📚 Z Cartridge Foundation
 
