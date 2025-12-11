@@ -1,0 +1,26 @@
+[Unit]
+Description=AI Council System - Automated Debate Platform
+After=network.target docker.service
+Requires=docker.service
+
+[Service]
+Type=forking
+RemainAfterExit=yes
+WorkingDirectory=/opt/ai-council-system
+ExecStart=/usr/bin/docker-compose -f deployment/docker-compose.production.yml up -d
+ExecStop=/usr/bin/docker-compose -f deployment/docker-compose.production.yml down
+ExecReload=/usr/bin/docker-compose -f deployment/docker-compose.production.yml restart
+TimeoutStartSec=0
+
+# Restart on failure
+Restart=on-failure
+RestartSec=10s
+
+# Security
+User=ai-council
+Group=ai-council
+PrivateTmp=yes
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target

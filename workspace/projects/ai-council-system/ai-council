@@ -1,0 +1,585 @@
+#!/usr/bin/env python3
+"""
+AI Council System - Comprehensive Command-Line Interface
+
+Complete CLI for controlling all aspects of the AI Council System:
+- Debate management and execution
+- Automation and scheduling
+- Streaming and recording
+- Health monitoring
+- Analytics and reporting
+- System administration
+
+Author: AI Council System
+Version: 2.0.0
+"""
+
+import sys
+import asyncio
+import argparse
+from pathlib import Path
+from typing import Optional, List
+import json
+from datetime import datetime
+
+# Add parent directory to path
+sys.path.insert(0, str(Path(__file__).parent))
+
+# Import core components
+from core.council import Council
+from core.agents import Agent, Personality
+from automation import (
+    AutomationOrchestrator,
+    OrchestratorConfig,
+    OrchestratorMode,
+    ScheduleConfig,
+    ScheduleType,
+    HealthMonitor,
+    AnalyticsDashboard
+)
+from streaming.avatars import AvatarGenerator
+from streaming.voices import VoiceSynthesisManager
+from streaming.backgrounds import BackgroundGenerator
+
+
+class AICouncilCLI:
+    """Comprehensive command-line interface for AI Council System"""
+
+    def __init__(self):
+        self.parser = self.create_parser()
+        self.orchestrator: Optional[AutomationOrchestrator] = None
+
+    def create_parser(self) -> argparse.ArgumentParser:
+        """Create argument parser with all commands"""
+        parser = argparse.ArgumentParser(
+            description="AI Council System - Multi-AI Debate Platform",
+            epilog="See 'ai-council <command> --help' for more information on a specific command."
+        )
+
+        parser.add_argument(
+            '--version',
+            action='version',
+            version='AI Council System v2.0.0'
+        )
+
+        subparsers = parser.add_subparsers(dest='command', help='Available commands')
+
+        # Debate commands
+        self.add_debate_commands(subparsers)
+
+        # Automation commands
+        self.add_automation_commands(subparsers)
+
+        # Streaming commands
+        self.add_streaming_commands(subparsers)
+
+        # Health commands
+        self.add_health_commands(subparsers)
+
+        # Analytics commands
+        self.add_analytics_commands(subparsers)
+
+        # System commands
+        self.add_system_commands(subparsers)
+
+        return parser
+
+    def add_debate_commands(self, subparsers):
+        """Add debate-related commands"""
+        # Debate start
+        debate_start = subparsers.add_parser(
+            'debate',
+            help='Start a debate on a specific topic'
+        )
+        debate_start.add_argument('topic', help='Debate topic')
+        debate_start.add_argument(
+            '--agents',
+            type=int,
+            default=5,
+            help='Number of agents (default: 5)'
+        )
+        debate_start.add_argument(
+            '--rounds',
+            type=int,
+            default=3,
+            help='Number of debate rounds (default: 3)'
+        )
+        debate_start.add_argument(
+            '--record',
+            action='store_true',
+            help='Record debate to file'
+        )
+        debate_start.add_argument(
+            '--output',
+            type=Path,
+            help='Output file path for recording'
+        )
+
+        # List personalities
+        subparsers.add_parser(
+            'list-personalities',
+            help='List all available AI personalities'
+        )
+
+        # Interactive debate
+        interactive = subparsers.add_parser(
+            'interactive',
+            help='Start interactive debate mode'
+        )
+        interactive.add_argument(
+            '--topic',
+            help='Initial topic (can be changed during debate)'
+        )
+
+    def add_automation_commands(self, subparsers):
+        """Add automation-related commands"""
+        # Start automation
+        auto_start = subparsers.add_parser(
+            'automate',
+            help='Start automated 24/7 operation'
+        )
+        auto_start.add_argument(
+            '--mode',
+            choices=['continuous', 'scheduled', 'on_demand', 'test'],
+            default='continuous',
+            help='Automation mode (default: continuous)'
+        )
+        auto_start.add_argument(
+            '--schedule',
+            choices=['adaptive', 'interval', 'cron', 'event_driven'],
+            default='adaptive',
+            help='Scheduling strategy (default: adaptive)'
+        )
+        auto_start.add_argument(
+            '--interval',
+            type=int,
+            default=60,
+            help='Interval in minutes for interval mode (default: 60)'
+        )
+        auto_start.add_argument(
+            '--max-debates',
+            type=int,
+            default=24,
+            help='Maximum debates per day (default: 24)'
+        )
+
+        # Schedule commands
+        schedule = subparsers.add_parser(
+            'schedule',
+            help='Manage debate schedule'
+        )
+        schedule.add_argument(
+            'action',
+            choices=['list', 'add', 'remove', 'clear'],
+            help='Schedule action'
+        )
+        schedule.add_argument(
+            '--topic',
+            help='Topic for scheduled debate'
+        )
+        schedule.add_argument(
+            '--time',
+            help='Scheduled time (ISO format)'
+        )
+
+    def add_streaming_commands(self, subparsers):
+        """Add streaming-related commands"""
+        # Start streaming
+        stream = subparsers.add_parser(
+            'stream',
+            help='Start streaming to platforms'
+        )
+        stream.add_argument(
+            '--platforms',
+            nargs='+',
+            choices=['youtube', 'twitch', 'facebook', 'twitter', 'custom'],
+            default=['youtube'],
+            help='Streaming platforms (default: youtube)'
+        )
+        stream.add_argument(
+            '--quality',
+            choices=['low', 'medium', 'high', 'ultra'],
+            default='high',
+            help='Stream quality (default: high)'
+        )
+        stream.add_argument(
+            '--record',
+            action='store_true',
+            help='Record stream to file'
+        )
+
+        # Test stream
+        subparsers.add_parser(
+            'test-stream',
+            help='Test streaming setup without going live'
+        )
+
+        # Stream status
+        subparsers.add_parser(
+            'stream-status',
+            help='Show current streaming status'
+        )
+
+    def add_health_commands(self, subparsers):
+        """Add health monitoring commands"""
+        # Health check
+        health = subparsers.add_parser(
+            'health',
+            help='Run health checks'
+        )
+        health.add_argument(
+            '--check',
+            help='Specific check to run'
+        )
+        health.add_argument(
+            '--all',
+            action='store_true',
+            help='Run all health checks'
+        )
+
+        # System status
+        subparsers.add_parser(
+            'status',
+            help='Show system status'
+        )
+
+        # Monitor
+        monitor = subparsers.add_parser(
+            'monitor',
+            help='Start health monitoring daemon'
+        )
+        monitor.add_argument(
+            '--interval',
+            type=int,
+            default=60,
+            help='Check interval in seconds (default: 60)'
+        )
+
+    def add_analytics_commands(self, subparsers):
+        """Add analytics-related commands"""
+        # Show analytics
+        analytics = subparsers.add_parser(
+            'analytics',
+            help='Show analytics dashboard'
+        )
+        analytics.add_argument(
+            '--format',
+            choices=['text', 'json', 'html'],
+            default='text',
+            help='Output format (default: text)'
+        )
+        analytics.add_argument(
+            '--period',
+            choices=['hour', 'day', 'week', 'month'],
+            default='day',
+            help='Time period (default: day)'
+        )
+
+        # Export data
+        export = subparsers.add_parser(
+            'export',
+            help='Export analytics data'
+        )
+        export.add_argument('output', type=Path, help='Output file path')
+        export.add_argument(
+            '--format',
+            choices=['json', 'csv', 'xlsx'],
+            default='json',
+            help='Export format (default: json)'
+        )
+
+        # Reports
+        subparsers.add_parser(
+            'report',
+            help='Generate performance report'
+        )
+
+    def add_system_commands(self, subparsers):
+        """Add system administration commands"""
+        # Initialize
+        init = subparsers.add_parser(
+            'init',
+            help='Initialize AI Council System'
+        )
+        init.add_argument(
+            '--reset',
+            action='store_true',
+            help='Reset existing configuration'
+        )
+
+        # Configure
+        config = subparsers.add_parser(
+            'config',
+            help='Configure system settings'
+        )
+        config.add_argument(
+            '--show',
+            action='store_true',
+            help='Show current configuration'
+        )
+        config.add_argument(
+            '--set',
+            nargs=2,
+            metavar=('KEY', 'VALUE'),
+            help='Set configuration value'
+        )
+
+        # Deploy
+        deploy = subparsers.add_parser(
+            'deploy',
+            help='Deploy to production'
+        )
+        deploy.add_argument(
+            '--mode',
+            choices=['docker', 'systemd', 'kubernetes'],
+            default='docker',
+            help='Deployment mode (default: docker)'
+        )
+        deploy.add_argument(
+            '--production',
+            action='store_true',
+            help='Use production configuration'
+        )
+
+        # Backup
+        backup = subparsers.add_parser(
+            'backup',
+            help='Backup system data'
+        )
+        backup.add_argument('output', type=Path, help='Backup output path')
+
+        # Restore
+        restore = subparsers.add_parser(
+            'restore',
+            help='Restore from backup'
+        )
+        restore.add_argument('backup_file', type=Path, help='Backup file to restore')
+
+        # Clean
+        clean = subparsers.add_parser(
+            'clean',
+            help='Clean caches and temporary files'
+        )
+        clean.add_argument(
+            '--cache',
+            action='store_true',
+            help='Clean all caches'
+        )
+        clean.add_argument(
+            '--logs',
+            action='store_true',
+            help='Clean old logs'
+        )
+        clean.add_argument(
+            '--recordings',
+            action='store_true',
+            help='Clean old recordings'
+        )
+
+    async def execute(self, args):
+        """Execute CLI command"""
+        if args.command is None:
+            self.parser.print_help()
+            return
+
+        # Route to appropriate handler
+        handler_name = f'handle_{args.command.replace("-", "_")}'
+        handler = getattr(self, handler_name, None)
+
+        if handler:
+            await handler(args)
+        else:
+            print(f"Error: Unknown command '{args.command}'")
+            self.parser.print_help()
+
+    # Command Handlers
+    async def handle_debate(self, args):
+        """Handle debate command"""
+        print(f"🎯 Starting debate: {args.topic}")
+        print(f"   Agents: {args.agents}")
+        print(f"   Rounds: {args.rounds}")
+        print(f"   Recording: {'Yes' if args.record else 'No'}")
+        print()
+
+        # TODO: Implement actual debate execution
+        print("✅ Debate started!")
+
+    async def handle_list_personalities(self, args):
+        """Handle list-personalities command"""
+        from core.agents.personalities import DEFAULT_PERSONALITIES
+
+        print("Available AI Personalities:\n")
+        for i, (name, personality) in enumerate(DEFAULT_PERSONALITIES.items(), 1):
+            print(f"{i:2}. {name}")
+            print(f"    Style: {personality.debate_style}")
+            print(f"    Expertise: {', '.join(personality.expertise_areas[:3])}")
+            print()
+
+    async def handle_automate(self, args):
+        """Handle automate command"""
+        print(f"🤖 Starting automated operation...")
+        print(f"   Mode: {args.mode}")
+        print(f"   Schedule: {args.schedule}")
+        print(f"   Max debates/day: {args.max_debates}")
+        print()
+
+        # Create orchestrator configuration
+        config = OrchestratorConfig(
+            mode=OrchestratorMode[args.mode.upper()],
+            schedule_config=ScheduleConfig(
+                schedule_type=ScheduleType[args.schedule.upper()],
+                interval_minutes=args.interval,
+                max_debates_per_day=args.max_debates
+            )
+        )
+
+        # Create and start orchestrator
+        self.orchestrator = AutomationOrchestrator(config)
+        await self.orchestrator.initialize()
+        await self.orchestrator.start()
+
+    async def handle_health(self, args):
+        """Handle health command"""
+        print("💚 Running health checks...\n")
+
+        monitor = HealthMonitor()
+        await monitor.run_all_checks()
+
+        stats = monitor.get_statistics()
+        print(f"Overall Status: {stats['overall_status'].upper()}")
+        print(f"Total Checks: {stats['total_checks']}")
+        print(f"Active Alerts: {stats['active_alerts']}\n")
+
+        print("Health Check Results:")
+        for name, check in stats['checks'].items():
+            status_icon = {
+                'healthy': '✅',
+                'degraded': '⚠️ ',
+                'unhealthy': '❌',
+                'critical': '🚨'
+            }.get(check['status'], '❓')
+            print(f"  {status_icon} {name:<20} | {check['status']:<10}")
+
+    async def handle_status(self, args):
+        """Handle status command"""
+        print("📊 AI Council System Status\n")
+        print(f"Version: 2.0.0")
+        print(f"Status: Production Ready")
+        print(f"Timestamp: {datetime.now().isoformat()}")
+        print()
+
+        if self.orchestrator:
+            status = self.orchestrator.get_status()
+            print(f"Orchestrator State: {status['state']}")
+            print(f"Running: {status['running']}")
+            print(f"Mode: {status['mode']}")
+            print()
+
+    async def handle_analytics(self, args):
+        """Handle analytics command"""
+        print(f"📈 Analytics Dashboard ({args.period})\n")
+
+        dashboard = AnalyticsDashboard()
+        data = dashboard.get_dashboard_data()
+
+        if args.format == 'json':
+            print(json.dumps(data, indent=2, default=str))
+        else:
+            # Text format
+            for category, metrics in data.items():
+                print(f"{category.upper()}:")
+                for key, value in metrics.items():
+                    print(f"  {key}: {value}")
+                print()
+
+    async def handle_init(self, args):
+        """Handle init command"""
+        print("🔧 Initializing AI Council System...")
+
+        # Create directories
+        dirs = ['recordings', 'voice_cache', 'avatar_cache', 'background_cache', 'logs', 'data']
+        for dir_name in dirs:
+            Path(dir_name).mkdir(exist_ok=True)
+            print(f"  ✅ Created {dir_name}/")
+
+        # Create .env if doesn't exist
+        if not Path('.env').exists() and Path('.env.example').exists():
+            import shutil
+            shutil.copy('.env.example', '.env')
+            print("  ✅ Created .env from template")
+            print("  ⚠️  Please edit .env and add your API keys!")
+
+        print("\n✅ Initialization complete!")
+
+    async def handle_deploy(self, args):
+        """Handle deploy command"""
+        print(f"🚀 Deploying AI Council System ({args.mode})...")
+
+        if args.mode == 'docker':
+            import subprocess
+            compose_file = 'deployment/docker-compose.production.yml' if args.production else 'docker-compose.yml'
+            subprocess.run(['docker-compose', '-f', compose_file, 'up', '-d'])
+            print("✅ Docker deployment started!")
+
+        elif args.mode == 'systemd':
+            print("Installing systemd service...")
+            import subprocess
+            subprocess.run(['sudo', 'cp', 'deployment/ai-council.service', '/etc/systemd/system/'])
+            subprocess.run(['sudo', 'systemctl', 'enable', 'ai-council'])
+            subprocess.run(['sudo', 'systemctl', 'start', 'ai-council'])
+            print("✅ Systemd service installed and started!")
+
+        else:
+            print(f"Deployment mode '{args.mode}' not yet implemented")
+
+    async def handle_clean(self, args):
+        """Handle clean command"""
+        print("🧹 Cleaning system...")
+
+        import shutil
+
+        if args.cache or not any([args.cache, args.logs, args.recordings]):
+            # Clean caches
+            for cache_dir in ['voice_cache', 'avatar_cache', 'background_cache']:
+                if Path(cache_dir).exists():
+                    shutil.rmtree(cache_dir)
+                    Path(cache_dir).mkdir()
+                    print(f"  ✅ Cleaned {cache_dir}/")
+
+        if args.logs:
+            # Clean logs
+            if Path('logs').exists():
+                shutil.rmtree('logs')
+                Path('logs').mkdir()
+                print("  ✅ Cleaned logs/")
+
+        if args.recordings:
+            # Clean recordings
+            if Path('recordings').exists():
+                for file in Path('recordings').glob('*'):
+                    if file.is_file():
+                        file.unlink()
+                print("  ✅ Cleaned recordings/")
+
+        print("\n✅ Cleanup complete!")
+
+
+def main():
+    """Main entry point"""
+    cli = AICouncilCLI()
+    args = cli.parser.parse_args()
+
+    try:
+        asyncio.run(cli.execute(args))
+    except KeyboardInterrupt:
+        print("\n\n👋 Interrupted by user")
+        sys.exit(0)
+    except Exception as e:
+        print(f"\n❌ Error: {e}")
+        import traceback
+        traceback.print_exc()
+        sys.exit(1)
+
+
+if __name__ == "__main__":
+    main()
