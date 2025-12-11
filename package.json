@@ -4,7 +4,7 @@
   "description": "A recursive root project",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"No tests specified\" && exit 0"
+    "test": "python3 tests/test_sub_issue_suggester.py"
   },
   "repository": {
     "type": "git",

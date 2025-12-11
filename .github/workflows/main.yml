@@ -23,7 +23,7 @@ jobs:
             npm install
           fi
       - name: Run tests
-        run: npm test || true
+        run: npm test
       - name: Generate SBOM
         run: echo "SBOM generation placeholder"
       - name: Provenance

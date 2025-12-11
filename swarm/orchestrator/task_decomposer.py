@@ -108,6 +108,8 @@ class TaskDecomposer:
         """
         logger.info(f"Decomposing {task_type.value} task: {task_description}")
 
+        # Reset task counter for each decomposition
+        self.task_counter = 0
         context = context or {}
 
         # Select appropriate decomposition strategy
@@ -161,15 +163,29 @@ class TaskDecomposer:
         ]
 
         for i, (phase_id, title, capabilities, effort) in enumerate(phases):
+            # Generate task ID
+            task_id = self._generate_task_id(phase_id)
+            
+            # Create dependencies from previous task
+            dependencies = []
+            if i > 0 and subtasks:
+                prev_task = subtasks[-1]
+                dependencies = [
+                    TaskDependency(
+                        task_id=prev_task.task_id,
+                        dependency_type="blocks"
+                    )
+                ]
+            
             task = Task(
-                task_id=self._generate_task_id(phase_id),
+                task_id=task_id,
                 title=f"{title}: {description}",
                 description=f"{title} phase of: {description}",
                 task_type=TaskType.DEVELOPMENT,
                 priority=TaskPriority.HIGH,
                 estimated_effort=effort,
                 required_capabilities=capabilities,
-                dependencies=self._create_sequential_dependencies(i, phases),
+                dependencies=dependencies,
                 acceptance_criteria=[f"Complete {title.lower()}"],
                 metadata={"phase": phase_id}
             )
@@ -194,15 +210,27 @@ class TaskDecomposer:
         ]
 
         for i, (phase_id, title, capabilities, effort) in enumerate(research_phases):
+            task_id = self._generate_task_id(phase_id)
+            
+            dependencies = []
+            if i > 0 and subtasks:
+                prev_task = subtasks[-1]
+                dependencies = [
+                    TaskDependency(
+                        task_id=prev_task.task_id,
+                        dependency_type="blocks"
+                    )
+                ]
+            
             task = Task(
-                task_id=self._generate_task_id(phase_id),
+                task_id=task_id,
                 title=f"{title}: {description}",
                 description=f"{title} for research task: {description}",
                 task_type=TaskType.RESEARCH,
                 priority=TaskPriority.MEDIUM,
                 estimated_effort=effort,
                 required_capabilities=capabilities,
-                dependencies=self._create_sequential_dependencies(i, research_phases),
+                dependencies=dependencies,
                 acceptance_criteria=[f"Complete {title.lower()}"],
                 metadata={"phase": phase_id}
             )
@@ -228,15 +256,27 @@ class TaskDecomposer:
         ]
 
         for i, (phase_id, title, capabilities, effort) in enumerate(analysis_phases):
+            task_id = self._generate_task_id(phase_id)
+            
+            dependencies = []
+            if i > 0 and subtasks:
+                prev_task = subtasks[-1]
+                dependencies = [
+                    TaskDependency(
+                        task_id=prev_task.task_id,
+                        dependency_type="blocks"
+                    )
+                ]
+            
             task = Task(
-                task_id=self._generate_task_id(phase_id),
+                task_id=task_id,
                 title=f"{title}: {description}",
                 description=f"{title} for: {description}",
                 task_type=TaskType.ANALYSIS,
                 priority=TaskPriority.MEDIUM,
                 estimated_effort=effort,
                 required_capabilities=capabilities,
-                dependencies=self._create_sequential_dependencies(i, analysis_phases),
+                dependencies=dependencies,
                 acceptance_criteria=[f"Complete {title.lower()}"],
                 metadata={"phase": phase_id}
             )
@@ -262,15 +302,27 @@ class TaskDecomposer:
         ]
 
         for i, (phase_id, title, capabilities, effort) in enumerate(testing_phases):
+            task_id = self._generate_task_id(phase_id)
+            
+            dependencies = []
+            if i > 0 and subtasks:
+                prev_task = subtasks[-1]
+                dependencies = [
+                    TaskDependency(
+                        task_id=prev_task.task_id,
+                        dependency_type="blocks"
+                    )
+                ]
+            
             task = Task(
-                task_id=self._generate_task_id(phase_id),
+                task_id=task_id,
                 title=f"{title}: {description}",
                 description=f"{title} for: {description}",
                 task_type=TaskType.TESTING,
                 priority=TaskPriority.HIGH,
                 estimated_effort=effort,
                 required_capabilities=capabilities,
-                dependencies=self._create_sequential_dependencies(i, testing_phases),
+                dependencies=dependencies,
                 acceptance_criteria=[f"Complete {title.lower()}"],
                 metadata={"phase": phase_id}
             )
@@ -295,15 +347,27 @@ class TaskDecomposer:
         ]
 
         for i, (phase_id, title, capabilities, effort) in enumerate(doc_phases):
+            task_id = self._generate_task_id(phase_id)
+            
+            dependencies = []
+            if i > 0 and subtasks:
+                prev_task = subtasks[-1]
+                dependencies = [
+                    TaskDependency(
+                        task_id=prev_task.task_id,
+                        dependency_type="blocks"
+                    )
+                ]
+            
             task = Task(
-                task_id=self._generate_task_id(phase_id),
+                task_id=task_id,
                 title=f"{title}: {description}",
                 description=f"{title} for: {description}",
                 task_type=TaskType.DOCUMENTATION,
                 priority=TaskPriority.MEDIUM,
                 estimated_effort=effort,
                 required_capabilities=capabilities,
-                dependencies=self._create_sequential_dependencies(i, doc_phases),
+                dependencies=dependencies,
                 acceptance_criteria=[f"Complete {title.lower()}"],
                 metadata={"phase": phase_id}
             )
@@ -328,15 +392,27 @@ class TaskDecomposer:
         ]
 
         for i, (phase_id, title, capabilities, effort) in enumerate(arch_phases):
+            task_id = self._generate_task_id(phase_id)
+            
+            dependencies = []
+            if i > 0 and subtasks:
+                prev_task = subtasks[-1]
+                dependencies = [
+                    TaskDependency(
+                        task_id=prev_task.task_id,
+                        dependency_type="blocks"
+                    )
+                ]
+            
             task = Task(
-                task_id=self._generate_task_id(phase_id),
+                task_id=task_id,
                 title=f"{title}: {description}",
                 description=f"{title} for: {description}",
                 task_type=TaskType.ARCHITECTURE,
                 priority=TaskPriority.CRITICAL,
                 estimated_effort=effort,
                 required_capabilities=capabilities,
-                dependencies=self._create_sequential_dependencies(i, arch_phases),
+                dependencies=dependencies,
                 acceptance_criteria=[f"Complete {title.lower()}"],
                 metadata={"phase": phase_id}
             )
@@ -409,23 +485,6 @@ class TaskDecomposer:
                 path.append(longest.task_id)
 
         return path
-
-    def _create_sequential_dependencies(
-        self,
-        current_index: int,
-        phases: List[tuple]
-    ) -> List[TaskDependency]:
-        """Create sequential dependencies between phases"""
-        if current_index == 0:
-            return []
-
-        prev_phase_id = phases[current_index - 1][0]
-        return [
-            TaskDependency(
-                task_id=self._generate_task_id(prev_phase_id),
-                dependency_type="blocks"
-            )
-        ]
 
     def _generate_task_id(self, prefix: str) -> str:
         """Generate unique task ID"""
