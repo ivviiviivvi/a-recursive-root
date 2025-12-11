@@ -1,0 +1,259 @@
+# MkDocs Configuration for AI Council System Documentation
+
+site_name: AI Council System
+site_description: Multi-Agent AI Debate Platform - Complete Documentation
+site_author: AI Council System Contributors
+site_url: https://docs.aicouncil.example.com
+
+# Repository
+repo_name: your-org/ai-council-system
+repo_url: https://github.com/your-org/ai-council-system
+edit_uri: edit/main/docs/
+
+# Copyright
+copyright: Copyright &copy; 2025 AI Council System Contributors
+
+# Theme Configuration
+theme:
+  name: material
+  language: en
+  palette:
+    # Light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    # Dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  font:
+    text: Roboto
+    code: Roboto Mono
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - navigation.footer
+    - search.suggest
+    - search.highlight
+    - search.share
+    - content.code.copy
+    - content.code.annotate
+    - content.tabs.link
+  icon:
+    repo: fontawesome/brands/github
+    logo: material/forum
+
+# Plugins
+plugins:
+  - search:
+      lang: en
+      separator: '[\s\-,:!=\[\]()"/]+|(?!\b)(?=[A-Z][a-z])|\.(?!\d)|&[lg]t;'
+  - minify:
+      minify_html: true
+  - git-revision-date-localized:
+      enable_creation_date: true
+      type: timeago
+  - awesome-pages
+
+# Extensions
+markdown_extensions:
+  - abbr
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - toc:
+      permalink: true
+      toc_depth: 3
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.snippets
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
+
+# Extra CSS/JS
+extra_css:
+  - stylesheets/extra.css
+
+extra_javascript:
+  - javascripts/mathjax.js
+  - https://polyfill.io/v3/polyfill.min.js?features=es6
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+
+# Extra Configuration
+extra:
+  version:
+    provider: mike
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/your-org/ai-council-system
+      name: GitHub Repository
+    - icon: fontawesome/brands/discord
+      link: https://discord.gg/aicouncil
+      name: Discord Community
+    - icon: fontawesome/brands/twitter
+      link: https://twitter.com/AICouncilSystem
+      name: Twitter Updates
+  analytics:
+    provider: google
+    property: G-XXXXXXXXXX
+    feedback:
+      title: Was this page helpful?
+      ratings:
+        - icon: material/emoticon-happy-outline
+          name: This page was helpful
+          data: 1
+          note: >-
+            Thanks for your feedback!
+        - icon: material/emoticon-sad-outline
+          name: This page could be improved
+          data: 0
+          note: >-
+            Thanks for your feedback! Help us improve by
+            <a href="https://github.com/your-org/ai-council-system/issues/new" target="_blank" rel="noopener">opening an issue</a>.
+
+# Navigation
+nav:
+  - Home: index.md
+  - Getting Started:
+      - Overview: getting-started/overview.md
+      - Quick Start: getting-started/quick-start.md
+      - Installation: getting-started/installation.md
+      - Configuration: getting-started/configuration.md
+      - First Debate: getting-started/first-debate.md
+  - User Guide:
+      - Debates:
+          - Creating Debates: user-guide/debates/creating.md
+          - Managing Debates: user-guide/debates/managing.md
+          - Debate Formats: user-guide/debates/formats.md
+      - Automation:
+          - Overview: user-guide/automation/overview.md
+          - Scheduling: user-guide/automation/scheduling.md
+          - Monitoring: user-guide/automation/monitoring.md
+      - Streaming:
+          - Setup: user-guide/streaming/setup.md
+          - Platforms: user-guide/streaming/platforms.md
+          - Customization: user-guide/streaming/customization.md
+      - Analytics:
+          - Dashboard: user-guide/analytics/dashboard.md
+          - Metrics: user-guide/analytics/metrics.md
+          - Reporting: user-guide/analytics/reporting.md
+  - Architecture:
+      - System Overview: architecture/overview.md
+      - Components:
+          - Event Ingestion: architecture/components/event-ingestion.md
+          - Topic Extraction: architecture/components/topic-extraction.md
+          - Debate Engine: architecture/components/debate-engine.md
+          - Media Pipeline: architecture/components/media-pipeline.md
+          - Streaming: architecture/components/streaming.md
+      - Data Flow: architecture/data-flow.md
+      - Database Schema: architecture/database.md
+  - Development:
+      - Developer Guide: development/developer-guide.md
+      - Project Structure: development/project-structure.md
+      - Contributing: development/contributing.md
+      - Code Style: development/code-style.md
+      - Testing: development/testing.md
+      - API Development: development/api-development.md
+  - API Reference:
+      - Overview: api/overview.md
+      - Authentication: api/authentication.md
+      - Endpoints:
+          - Debates: api/endpoints/debates.md
+          - Automation: api/endpoints/automation.md
+          - Streaming: api/endpoints/streaming.md
+          - Health: api/endpoints/health.md
+          - Analytics: api/endpoints/analytics.md
+          - Governance: api/endpoints/governance.md
+      - Webhooks: api/webhooks.md
+      - Rate Limits: api/rate-limits.md
+      - OpenAPI Spec: api/openapi.md
+  - Deployment:
+      - Quick Deploy:
+          - Overview: deployment/quick-deploy/overview.md
+          - DigitalOcean: deployment/quick-deploy/digitalocean.md
+          - AWS: deployment/quick-deploy/aws.md
+          - Google Cloud: deployment/quick-deploy/gcp.md
+          - Heroku: deployment/quick-deploy/heroku.md
+          - Docker Compose: deployment/quick-deploy/docker.md
+      - Production:
+          - Requirements: deployment/production/requirements.md
+          - Kubernetes: deployment/production/kubernetes.md
+          - Monitoring: deployment/production/monitoring.md
+          - Backup: deployment/production/backup.md
+          - Security: deployment/production/security.md
+          - Scaling: deployment/production/scaling.md
+  - Advanced Topics:
+      - Customization:
+          - AI Personalities: advanced/customization/personalities.md
+          - Debate Formats: advanced/customization/formats.md
+          - Visual Effects: advanced/customization/effects.md
+          - Voice Profiles: advanced/customization/voices.md
+      - Integration:
+          - Event Sources: advanced/integration/event-sources.md
+          - Blockchain: advanced/integration/blockchain.md
+          - External APIs: advanced/integration/apis.md
+      - Performance:
+          - Optimization: advanced/performance/optimization.md
+          - Caching: advanced/performance/caching.md
+          - Benchmarking: advanced/performance/benchmarking.md
+      - Research:
+          - Multi-Agent Systems: advanced/research/multi-agent.md
+          - Consensus Formation: advanced/research/consensus.md
+          - Academic Papers: advanced/research/papers.md
+  - Reference:
+      - CLI Commands: reference/cli.md
+      - Configuration Options: reference/configuration.md
+      - Environment Variables: reference/environment.md
+      - Error Codes: reference/errors.md
+      - Glossary: reference/glossary.md
+      - FAQ: reference/faq.md
+  - Community:
+      - Code of Conduct: community/code-of-conduct.md
+      - Contributing Guide: community/contributing.md
+      - License: community/license.md
+      - Support: community/support.md
+      - Roadmap: community/roadmap.md
+      - Blog: community/blog.md
+  - Meta:
+      - Development Journey: meta/journey.md
+      - Methodology: meta/methodology.md
+      - Cost Analysis: meta/cost-analysis.md
+      - Replication Guide: meta/replication.md

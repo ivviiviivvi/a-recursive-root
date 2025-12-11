@@ -1,0 +1,605 @@
+openapi: 3.0.3
+info:
+  title: AI Council System API
+  description: |
+    Production-ready API for the AI Council System - a multi-AI debate platform
+    with automated streaming, blockchain integration, and comprehensive analytics.
+
+    ## Features
+    - Multi-agent debate orchestration
+    - Blockchain governance and voting
+    - Event-driven topic selection
+    - Multi-platform streaming
+    - Health monitoring and analytics
+    - Media production pipeline
+
+    ## Authentication
+    API keys required for most endpoints. Contact admin for access.
+
+  version: 2.0.0
+  contact:
+    name: AI Council System
+    url: https://github.com/your-org/ai-council-system
+  license:
+    name: TBD
+    url: https://github.com/your-org/ai-council-system/LICENSE
+
+servers:
+  - url: http://localhost:8000
+    description: Development server
+  - url: https://api.aicouncil.example.com
+    description: Production server
+
+tags:
+  - name: debates
+    description: Debate management and execution
+  - name: automation
+    description: Automated scheduling and operation
+  - name: streaming
+    description: Multi-platform streaming
+  - name: health
+    description: Health monitoring and status
+  - name: analytics
+    description: Performance analytics and insights
+  - name: governance
+    description: Blockchain governance and voting
+  - name: events
+    description: Event ingestion and processing
+  - name: media
+    description: Media production pipeline
+
+paths:
+  # Debate Endpoints
+  /api/v1/debates:
+    get:
+      tags:
+        - debates
+      summary: List all debates
+      description: Get a list of all debates with optional filtering
+      parameters:
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [pending, active, completed, failed]
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 50
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: List of debates
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  debates:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Debate'
+                  total:
+                    type: integer
+                  limit:
+                    type: integer
+                  offset:
+                    type: integer
+
+    post:
+      tags:
+        - debates
+      summary: Create a new debate
+      description: Schedule and create a new debate
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - topic
+              properties:
+                topic:
+                  type: string
+                  example: "The Impact of AI on Society"
+                scheduled_time:
+                  type: string
+                  format: date-time
+                agent_count:
+                  type: integer
+                  default: 5
+                round_count:
+                  type: integer
+                  default: 3
+                metadata:
+                  type: object
+      responses:
+        '201':
+          description: Debate created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Debate'
+        '400':
+          description: Invalid request
+
+  /api/v1/debates/{debate_id}:
+    get:
+      tags:
+        - debates
+      summary: Get debate details
+      parameters:
+        - name: debate_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Debate details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Debate'
+        '404':
+          description: Debate not found
+
+    delete:
+      tags:
+        - debates
+      summary: Cancel a debate
+      parameters:
+        - name: debate_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Debate cancelled
+        '404':
+          description: Debate not found
+
+  /api/v1/debates/{debate_id}/transcript:
+    get:
+      tags:
+        - debates
+      summary: Get debate transcript
+      parameters:
+        - name: debate_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Debate transcript
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  debate_id:
+                    type: string
+                  topic:
+                    type: string
+                  rounds:
+                    type: array
+                    items:
+                      type: object
+
+  # Automation Endpoints
+  /api/v1/automation/start:
+    post:
+      tags:
+        - automation
+      summary: Start automation system
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                mode:
+                  type: string
+                  enum: [continuous, scheduled, on_demand, test]
+                schedule_type:
+                  type: string
+                  enum: [adaptive, interval, cron, event_driven]
+                config:
+                  type: object
+      responses:
+        '200':
+          description: Automation started
+        '400':
+          description: Invalid configuration
+
+  /api/v1/automation/stop:
+    post:
+      tags:
+        - automation
+      summary: Stop automation system
+      responses:
+        '200':
+          description: Automation stopped
+
+  /api/v1/automation/status:
+    get:
+      tags:
+        - automation
+      summary: Get automation status
+      responses:
+        '200':
+          description: Automation status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  running:
+                    type: boolean
+                  mode:
+                    type: string
+                  schedule_type:
+                    type: string
+                  stats:
+                    type: object
+
+  # Streaming Endpoints
+  /api/v1/streaming/start:
+    post:
+      tags:
+        - streaming
+      summary: Start streaming
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                platforms:
+                  type: array
+                  items:
+                    type: string
+                    enum: [youtube, twitch, facebook, twitter, custom]
+                quality:
+                  type: string
+                  enum: [low, medium, high, ultra]
+                record:
+                  type: boolean
+      responses:
+        '200':
+          description: Streaming started
+
+  /api/v1/streaming/stop:
+    post:
+      tags:
+        - streaming
+      summary: Stop streaming
+      responses:
+        '200':
+          description: Streaming stopped
+
+  /api/v1/streaming/status:
+    get:
+      tags:
+        - streaming
+      summary: Get streaming status
+      responses:
+        '200':
+          description: Streaming status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StreamingStatus'
+
+  # Health Endpoints
+  /api/v1/health:
+    get:
+      tags:
+        - health
+      summary: Overall system health
+      responses:
+        '200':
+          description: System health
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum: [healthy, degraded, unhealthy, critical]
+                  checks:
+                    type: object
+                  timestamp:
+                    type: string
+                    format: date-time
+
+  /api/v1/health/checks:
+    get:
+      tags:
+        - health
+      summary: Get all health check results
+      responses:
+        '200':
+          description: Health check results
+          content:
+            application/json:
+              schema:
+                type: object
+
+  # Analytics Endpoints
+  /api/v1/analytics/dashboard:
+    get:
+      tags:
+        - analytics
+      summary: Get analytics dashboard data
+      parameters:
+        - name: period
+          in: query
+          schema:
+            type: string
+            enum: [hour, day, week, month]
+            default: day
+      responses:
+        '200':
+          description: Dashboard data
+          content:
+            application/json:
+              schema:
+                type: object
+
+  /api/v1/analytics/debates:
+    get:
+      tags:
+        - analytics
+      summary: Get debate analytics
+      responses:
+        '200':
+          description: Debate analytics
+          content:
+            application/json:
+              schema:
+                type: object
+
+  /api/v1/analytics/streaming:
+    get:
+      tags:
+        - analytics
+      summary: Get streaming analytics
+      responses:
+        '200':
+          description: Streaming analytics
+          content:
+            application/json:
+              schema:
+                type: object
+
+  # Governance Endpoints
+  /api/v1/governance/proposals:
+    get:
+      tags:
+        - governance
+      summary: List governance proposals
+      responses:
+        '200':
+          description: List of proposals
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Proposal'
+
+    post:
+      tags:
+        - governance
+      summary: Create governance proposal
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - topic
+              properties:
+                topic:
+                  type: string
+                metadata:
+                  type: object
+      responses:
+        '201':
+          description: Proposal created
+
+  /api/v1/governance/proposals/{proposal_id}/vote:
+    post:
+      tags:
+        - governance
+      summary: Vote on proposal
+      parameters:
+        - name: proposal_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - vote
+              properties:
+                vote:
+                  type: string
+                  enum: [for, against, abstain]
+                stake:
+                  type: number
+      responses:
+        '200':
+          description: Vote recorded
+
+  # Event Endpoints
+  /api/v1/events/ingest:
+    post:
+      tags:
+        - events
+      summary: Ingest external event
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - source
+                - content
+              properties:
+                source:
+                  type: string
+                  enum: [twitter, reddit, discord, rss, manual]
+                content:
+                  type: string
+                metadata:
+                  type: object
+      responses:
+        '201':
+          description: Event ingested
+
+  /api/v1/events/topics:
+    get:
+      tags:
+        - events
+      summary: Get extracted topics
+      responses:
+        '200':
+          description: Extracted topics
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+
+  # Media Endpoints
+  /api/v1/media/avatars:
+    get:
+      tags:
+        - media
+      summary: List available avatars
+      responses:
+        '200':
+          description: Avatar list
+
+  /api/v1/media/voices:
+    get:
+      tags:
+        - media
+      summary: List voice profiles
+      responses:
+        '200':
+          description: Voice profiles
+
+  /api/v1/media/backgrounds:
+    get:
+      tags:
+        - media
+      summary: List background styles
+      responses:
+        '200':
+          description: Background styles
+
+components:
+  schemas:
+    Debate:
+      type: object
+      properties:
+        debate_id:
+          type: string
+        topic:
+          type: string
+        status:
+          type: string
+          enum: [pending, active, completed, failed]
+        scheduled_time:
+          type: string
+          format: date-time
+        actual_start_time:
+          type: string
+          format: date-time
+        actual_end_time:
+          type: string
+          format: date-time
+        agent_count:
+          type: integer
+        round_count:
+          type: integer
+        engagement_score:
+          type: number
+          format: float
+        consensus_level:
+          type: number
+          format: float
+        metadata:
+          type: object
+
+    StreamingStatus:
+      type: object
+      properties:
+        is_streaming:
+          type: boolean
+        platforms:
+          type: array
+          items:
+            type: object
+            properties:
+              platform:
+                type: string
+              status:
+                type: string
+              viewers:
+                type: integer
+              bitrate_kbps:
+                type: number
+        total_viewers:
+          type: integer
+        uptime_seconds:
+          type: integer
+
+    Proposal:
+      type: object
+      properties:
+        proposal_id:
+          type: string
+        topic:
+          type: string
+        proposer:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        votes_for:
+          type: number
+        votes_against:
+          type: number
+        status:
+          type: string
+          enum: [pending, active, approved, rejected]
+
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+
+security:
+  - ApiKeyAuth: []

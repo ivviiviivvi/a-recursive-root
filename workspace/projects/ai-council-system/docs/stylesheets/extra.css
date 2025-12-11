@@ -1,0 +1,174 @@
+/* Custom CSS for AI Council System Documentation */
+
+/* Grid cards styling */
+.md-typeset .grid.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    margin: 2rem 0;
+}
+
+.md-typeset .grid.cards > * {
+    border: 1px solid var(--md-default-fg-color--lightest);
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.md-typeset .grid.cards > *:hover {
+    border-color: var(--md-accent-fg-color);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+/* Icons in cards */
+.md-typeset .grid.cards .lg.middle {
+    font-size: 3rem;
+    display: block;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+/* Button styling */
+.md-button {
+    margin: 0.5rem;
+}
+
+/* Admonition customization */
+.md-typeset .admonition.tip {
+    border-left-color: #00c853;
+}
+
+.md-typeset .admonition.warning {
+    border-left-color: #ff9100;
+}
+
+.md-typeset .admonition.danger {
+    border-left-color: #ff1744;
+}
+
+/* Code block enhancements */
+.md-typeset pre > code {
+    padding: 1rem;
+}
+
+/* Table styling */
+.md-typeset table:not([class]) {
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+.md-typeset table:not([class]) thead {
+    background: var(--md-primary-fg-color);
+    color: var(--md-primary-bg-color);
+}
+
+/* Mermaid diagrams */
+.mermaid {
+    text-align: center;
+    margin: 2rem 0;
+}
+
+/* Hero section */
+.hero {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: linear-gradient(135deg, var(--md-primary-fg-color) 0%, var(--md-accent-fg-color) 100%);
+    color: white;
+    border-radius: 1rem;
+    margin: 2rem 0;
+}
+
+.hero h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+/* Feature highlights */
+.feature-highlight {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    margin: 1rem 0;
+    border-left: 4px solid var(--md-accent-fg-color);
+    background: var(--md-code-bg-color);
+    border-radius: 0.5rem;
+}
+
+.feature-highlight .icon {
+    font-size: 2rem;
+    flex-shrink: 0;
+}
+
+/* Performance metrics table */
+.metrics-table {
+    width: 100%;
+    margin: 2rem 0;
+}
+
+.metrics-table th {
+    text-align: left;
+    font-weight: 600;
+}
+
+.metrics-table td:last-child {
+    font-family: var(--md-code-font);
+    color: var(--md-accent-fg-color);
+}
+
+/* Command line styling */
+.md-typeset .command-line {
+    background: #1e1e1e;
+    color: #d4d4d4;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    font-family: var(--md-code-font);
+    margin: 1rem 0;
+}
+
+/* Badge styling */
+.badge {
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin: 0.25rem;
+}
+
+.badge.success {
+    background: #00c853;
+    color: white;
+}
+
+.badge.warning {
+    background: #ff9100;
+    color: white;
+}
+
+.badge.info {
+    background: #2196f3;
+    color: white;
+}
+
+/* Version badge */
+.version-badge {
+    background: var(--md-accent-fg-color);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 768px) {
+    .md-typeset .grid.cards {
+        grid-template-columns: 1fr;
+    }
+
+    .hero h1 {
+        font-size: 2rem;
+    }
+}
